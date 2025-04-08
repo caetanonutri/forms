@@ -807,14 +807,29 @@ input.r4:checked + label { background-color: #F44336; color: white; }
     }
   }
   document.addEventListener('DOMContentLoaded', () => {
-    const grupos = new Set();
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
-      if (!grupos.has(radio.name)) {
-        radio.required = true;
-        grupos.add(radio.name);
+  const grupos = new Set();
+  document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    grupos.add(radio.name);
+  });
+
+  // Intercepta o envio do formulário
+  const form = document.querySelector('form');
+  form.addEventListener('submit', function (e) {
+    let todosPreenchidos = true;
+
+    grupos.forEach(name => {
+      const selecionado = document.querySelector(`input[name="${name}"]:checked`);
+      if (!selecionado) {
+        todosPreenchidos = false;
       }
     });
+
+    if (!todosPreenchidos) {
+      e.preventDefault(); // impede o envio
+      alert("Por favor, responda todos os campos de pontuação antes de enviar o formulário.");
+    }
   });
+});
 </script>
 
 </body>
